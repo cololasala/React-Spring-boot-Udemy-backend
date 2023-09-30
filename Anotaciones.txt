@@ -1,0 +1,39 @@
+Un service maneja logica de negocio, transacciones, etc.
+
+@RestController sirve para hacer una API rest, es un estereotipo que combina @RequestBody y @Controller
+@RequestBody en el cuerpo de la respuesta sera generalmente un JSON
+@Controller xq sera encargado de manejar endpoints y metodos mapeados a rutas url que manejan request y response.
+
+La idea de usar DTO (data access object), es formatear datos para hacerlos reutilizables y poder dar al frontend los datos que necesita
+realmente. A partir del @Entity poblamos el DTO a nuestro gusto.
+
+La base de datos necesitamos tenerla ya creada en Mysql.
+
+spring.jpa.hibernate.ddl-auto=create, para crear tabla y usar sentencias sql de impoort.sql (ubicada en resources), luego se cambia:
+spring.jpa.hibernate.ddl-auto=update
+
+ORM -> (mapeo objeto relacional), se encarga de llevar lo SQL a un modelado de objetos.
+
+En la tabla users tenemos dos index de tipo unique (email y password), estos indices nos ayudan a verificar que desde front no se inserten
+email o username que ya existen en la tabla.
+
+con click derecho y generate y override se puede ver los posibles metodos para sobreescribirlos.
+
+---------------------------------------------------------------------
+Spring security
+El SecurityFilterChain utiliza nuesto filtro JwtAuthenticationFilter
+
+http://localhost:8080/login , es la url para hacer login y que retorne el token.
+Usamos Bearer token, si no lo enviamos en peticiones dara un error 403.
+
+Nuestro token tiene una secret key(al principio usamos esta "algun_token_con_frase_secreta", l) que usamos para validar el token, y la otra parte es el username.
+Entonces ya que cada user tiene un username diferente, cada user tendra un token diferente.
+
+JWT, esta formado por una cabecera, un payload(data enviada al cliente) y la firma. La firma se genera con un codigo secreto.
+La firma es secreta, debe ser mantenida en el backend(podria ser en una variable de entorno o constante), tambien esta encriptada.
+El payload no debe tener informacion sensible ya que es visible si desencritamos el token.
+El token esta codificado en Base64
+
+Usamos esta version java para JWT -> maven: io.jsonwebtoken / jjwt-root / 0.11.1, ponemos las dependecias en el pom.
+
+Se tendran 2 roles -> Admin y User. Se crean las entidades para hacer la relacion muchos a muchos.
